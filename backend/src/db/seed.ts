@@ -27,6 +27,7 @@ const PERMISSION_SEED: Array<{ name: string; resource: string; action: string }>
   { name: "manage_users", resource: "user", action: "manage" },
   { name: "manage_roles", resource: "role", action: "manage" },
   { name: "view_analytics", resource: "analytics", action: "view" },
+  { name: "view_audit_logs", resource: "audit_log", action: "view" },
 ];
 
 const ROLE_PERMISSION_MAP: Record<string, string[]> = {
