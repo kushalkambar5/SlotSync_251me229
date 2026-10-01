@@ -10,41 +10,44 @@ import {
   updateRoleSchema,
 } from "./rbac.validation.js";
 
-export const rbacRoutes = Router();
+export const roleRoutes = Router();
+export const permissionRoutes = Router();
 
-rbacRoutes.use(authenticate);
-rbacRoutes.get("/roles", requirePermission("manage_roles"), asyncHandler(RbacController.listRoles));
-rbacRoutes.post(
-  "/roles",
+roleRoutes.use(authenticate);
+roleRoutes.get("/", requirePermission("manage_roles"), asyncHandler(RbacController.listRoles));
+roleRoutes.post(
+  "/",
   requirePermission("manage_roles"),
   validate(createRoleSchema),
   asyncHandler(RbacController.createRole),
 );
-rbacRoutes.get("/roles/:id", requirePermission("manage_roles"), asyncHandler(RbacController.getRole));
-rbacRoutes.patch(
-  "/roles/:id",
+roleRoutes.get("/:id", requirePermission("manage_roles"), asyncHandler(RbacController.getRole));
+roleRoutes.patch(
+  "/:id",
   requirePermission("manage_roles"),
   validate(updateRoleSchema),
   asyncHandler(RbacController.updateRole),
 );
-rbacRoutes.patch(
-  "/roles/:id/status",
+roleRoutes.patch(
+  "/:id/status",
   requirePermission("manage_roles"),
   asyncHandler(RbacController.deactivateRole),
 );
-rbacRoutes.post(
-  "/roles/:id/permissions",
+roleRoutes.post(
+  "/:id/permissions",
   requirePermission("manage_roles"),
   validate(assignPermissionSchema),
   asyncHandler(RbacController.assignPermission),
 );
-rbacRoutes.delete(
-  "/roles/:id/permissions/:permissionId",
+roleRoutes.delete(
+  "/:id/permissions/:permissionId",
   requirePermission("manage_roles"),
   asyncHandler(RbacController.removePermission),
 );
-rbacRoutes.get(
-  "/permissions",
+
+permissionRoutes.use(authenticate);
+permissionRoutes.get(
+  "/",
   requirePermission("manage_roles"),
   asyncHandler(RbacController.listPermissions),
 );

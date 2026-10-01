@@ -22,12 +22,12 @@ const updateSchema = z.object({
 const statusSchema = z.object({ isActive: z.boolean() });
 
 export const facilityTypeRoutes = Router();
-facilityTypeRoutes.use(authenticate);
 
+// Public reference data — same reason as departments (usable before login).
 facilityTypeRoutes.get(
   "/",
   asyncHandler(async (_req, res) => {
-    ok(res, await db.select().from(facilityTypes).orderBy(desc(facilityTypes.createdAt)));
+    ok(res, await db.select().from(facilityTypes).where(eq(facilityTypes.isActive, true)).orderBy(facilityTypes.name));
   }),
 );
 
@@ -43,6 +43,8 @@ facilityTypeRoutes.get(
     ok(res, rows[0]);
   }),
 );
+
+facilityTypeRoutes.use(authenticate);
 
 facilityTypeRoutes.post(
   "/",

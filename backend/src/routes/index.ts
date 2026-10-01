@@ -2,7 +2,7 @@ import { Router } from "express";
 import { sql } from "drizzle-orm";
 import { authRoutes } from "../modules/auth/auth.routes.js";
 import { userRoutes } from "../modules/users/user.routes.js";
-import { rbacRoutes } from "../modules/rbac/rbac.routes.js";
+import { roleRoutes, permissionRoutes } from "../modules/rbac/rbac.routes.js";
 import { departmentRoutes } from "../modules/departments/department.routes.js";
 import { facilityTypeRoutes } from "../modules/facility-types/facility-type.routes.js";
 import { facilityRoutes } from "../modules/facilities/facility.routes.js";
@@ -28,7 +28,8 @@ apiRouter.get(
 
 apiRouter.use("/auth", authRoutes);
 apiRouter.use("/users", userRoutes);
-apiRouter.use("/", rbacRoutes); // /roles, /permissions
+apiRouter.use("/roles", roleRoutes);
+apiRouter.use("/permissions", permissionRoutes);
 apiRouter.use("/departments", departmentRoutes);
 apiRouter.use("/facility-types", facilityTypeRoutes);
 apiRouter.use("/facilities", facilityRoutes);

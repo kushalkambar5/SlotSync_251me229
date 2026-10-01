@@ -22,12 +22,12 @@ const updateSchema = z.object({
 const statusSchema = z.object({ isActive: z.boolean() });
 
 export const departmentRoutes = Router();
-departmentRoutes.use(authenticate);
 
+// Public — needed by register page (unauthenticated) to populate department dropdown.
 departmentRoutes.get(
   "/",
   asyncHandler(async (_req, res) => {
-    ok(res, await db.select().from(departments).orderBy(desc(departments.createdAt)));
+    ok(res, await db.select().from(departments).where(eq(departments.isActive, true)).orderBy(departments.name));
   }),
 );
 
@@ -39,6 +39,8 @@ departmentRoutes.get(
     ok(res, rows[0]);
   }),
 );
+
+departmentRoutes.use(authenticate);
 
 departmentRoutes.post(
   "/",

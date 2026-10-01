@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/providers/AuthProvider";
+import { GuestRoute } from "@/components/auth/ProtectedRoute";
 import { getErrorMessage } from "@/lib/api/errors";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, FieldError } from "@/components/ui/Input";
@@ -68,7 +69,8 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Card>
+    <GuestRoute>
+      <Card>
       <CardBody>
         <div className="mb-6 flex flex-col items-center gap-2 text-center">
           <span className="relative block h-9 w-36">
@@ -87,6 +89,7 @@ export default function LoginPage() {
           </Link>
         </p>
       </CardBody>
-    </Card>
+      </Card>
+    </GuestRoute>
   );
 }

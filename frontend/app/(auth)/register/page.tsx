@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/providers/AuthProvider";
+import { GuestRoute } from "@/components/auth/ProtectedRoute";
 import { useDepartments } from "@/features/auth/hooks";
 import { getErrorMessage } from "@/lib/api/errors";
 import { Button } from "@/components/ui/Button";
@@ -56,6 +57,7 @@ export default function RegisterPage() {
   };
 
   return (
+    <GuestRoute>
     <Card>
       <CardBody>
         <div className="mb-6 flex flex-col items-center gap-2 text-center">
@@ -118,5 +120,6 @@ export default function RegisterPage() {
         </p>
       </CardBody>
     </Card>
+    </GuestRoute>
   );
 }
