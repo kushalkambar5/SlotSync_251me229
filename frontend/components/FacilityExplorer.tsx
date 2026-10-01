@@ -166,11 +166,7 @@ const campusFacilities: Facility[] = [
   },
 ];
 
-interface FacilityExplorerProps {
-  onSelectSlot?: (facility: Facility, slotTime: string) => void;
-}
-
-export default function FacilityExplorer({ onSelectSlot }: FacilityExplorerProps) {
+export default function FacilityExplorer() {
   const [selectedType, setSelectedType] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [capacityFilter, setCapacityFilter] = useState<number>(0);
@@ -196,10 +192,6 @@ export default function FacilityExplorer({ onSelectSlot }: FacilityExplorerProps
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDE8EB] text-xs font-bold text-[#EF2B4D] uppercase tracking-wider mb-3">
-              <Sparkles className="w-3.5 h-3.5" />
-              Live Infrastructure Directory
-            </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1F1F1F] tracking-tight">
               Explore Campus Facilities & Real-Time Availability
             </h2>
@@ -372,24 +364,6 @@ export default function FacilityExplorer({ onSelectSlot }: FacilityExplorerProps
                     <span>{isGridActive ? "Hide Slot Grid" : "View Hourly Matrix"}</span>
                     <ChevronRight className={`w-3.5 h-3.5 transform transition-transform ${isGridActive ? "rotate-90" : ""}`} />
                   </button>
-
-                  <button
-                    type="button"
-                    disabled={isMaintenance}
-                    onClick={() => {
-                      if (onSelectSlot) {
-                        const firstAvailable = facility.slots.find((s) => s.status === "available");
-                        onSelectSlot(facility, firstAvailable ? firstAvailable.time : "10:00 - 11:00 AM");
-                      }
-                    }}
-                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                      isMaintenance
-                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                        : "bg-[#EF2B4D] text-white hover:bg-[#D81E40] shadow-xs active:scale-[0.98]"
-                    }`}
-                  >
-                    {isMaintenance ? "Locked" : "Request Slot"}
-                  </button>
                 </div>
 
                 {/* Expandable Live Slot Matrix on the Card */}
@@ -408,15 +382,8 @@ export default function FacilityExplorer({ onSelectSlot }: FacilityExplorerProps
                         const isMaint = slot.status === "maintenance";
 
                         return (
-                          <button
+                          <div
                             key={idx}
-                            type="button"
-                            disabled={!isAvail}
-                            onClick={() => {
-                              if (isAvail && onSelectSlot) {
-                                onSelectSlot(facility, slot.time);
-                              }
-                            }}
                             className={`p-2 rounded-lg text-left text-[11px] font-medium transition-all ${
                               isAvail
                                 ? "bg-white border border-emerald-300 hover:bg-emerald-50 hover:border-emerald-500 text-gray-900 cursor-pointer shadow-2xs"
@@ -450,7 +417,7 @@ export default function FacilityExplorer({ onSelectSlot }: FacilityExplorerProps
                                 {slot.bookedBy}
                               </div>
                             )}
-                          </button>
+                          </div>
                         );
                       })}
                     </div>

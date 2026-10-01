@@ -16,41 +16,6 @@ import {
 export default function Footer() {
   return (
     <footer className="bg-[#1F1F1F] text-white border-t border-gray-800">
-      
-      {/* Top Banner inside Footer */}
-      <div className="border-b border-gray-800/80 bg-black/30 py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="relative w-12 h-12 rounded-2xl overflow-hidden shadow-md shrink-0 border border-white/10">
-              <Image
-                src="/logo.png"
-                alt="SlotSync App Icon"
-                fill
-                sizes="48px"
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <div className="text-base font-extrabold text-white">
-                SlotSync Campus Platform
-              </div>
-              <div className="text-xs text-gray-400">
-                National Institute of Technology Karnataka, Surathkal
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-400 border border-emerald-800">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              All Booking Services Operational
-            </span>
-            <span className="text-xs text-gray-400 bg-white/5 px-3 py-1 rounded-full border border-white/10">
-              v1.0.0 · Production Ready
-            </span>
-          </div>
-        </div>
-      </div>
 
       {/* Main Footer Links */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

@@ -17,15 +17,7 @@ import {
   Zap,
 } from "lucide-react";
 
-interface HeroSectionProps {
-  onOpenBookingModal?: () => void;
-  onSelectFacility?: (facilityName: string) => void;
-}
-
-export default function HeroSection({
-  onOpenBookingModal,
-  onSelectFacility,
-}: HeroSectionProps) {
+export default function HeroSection() {
   const [selectedSlot, setSelectedSlot] = useState<string>("10:00 - 11:00 AM");
   const [isSimulatedBooked, setIsSimulatedBooked] = useState(false);
 
@@ -56,13 +48,6 @@ export default function HeroSection({
           
           {/* Left Column: Headlines, Value Prop, CTAs, 4 Pillars */}
           <div className="lg:col-span-7 flex flex-col items-start">
-            
-            {/* Campus Tag Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FDE8EB] border border-[#EF2B4D]/20 mb-6 text-xs sm:text-sm font-semibold text-[#EF2B4D]">
-              <span className="flex h-2 w-2 rounded-full bg-[#EF2B4D] animate-ping" />
-              <span>NITK Campus Infrastructure Booking Module</span>
-            </div>
-
             {/* Main Headline with Brand Red Accent */}
             <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold text-[#1F1F1F] tracking-tight leading-[1.12] text-balance">
               Your Campus Spaces,{" "}
@@ -80,29 +65,18 @@ export default function HeroSection({
 
             {/* Action Buttons */}
             <div className="mt-8 flex flex-wrap items-center gap-4 w-full sm:w-auto">
-              <button
-                type="button"
-                onClick={onOpenBookingModal}
+              <a
+                href=""
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-base font-bold text-white bg-[#EF2B4D] hover:bg-[#D81E40] active:scale-[0.98] rounded-xl shadow-md hover:shadow-lg hover:shadow-[#EF2B4D]/20 transition-all focus-visible:ring-2 focus-visible:ring-[#EF2B4D] focus-visible:ring-offset-2"
               >
-                <span>Request 1-Hour Slot</span>
-                <ArrowRight className="w-5 h-5" aria-hidden="true" />
-              </button>
-
-              <a
-                href="#live-grid"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold text-[#1F1F1F] bg-[#F4F5F7] hover:bg-gray-200 active:scale-[0.98] rounded-xl border border-gray-200 transition-colors focus-visible:ring-2 focus-visible:ring-[#EF2B4D]"
-              >
-                <Calendar className="w-4 h-4 text-gray-600" aria-hidden="true" />
-                <span>Check Live Grid</span>
+                <span>Signup</span>
               </a>
 
               <a
-                href="#roles"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold text-gray-600 hover:text-[#EF2B4D] transition-colors"
+                href=""
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold text-[#1F1F1F] bg-[#F4F5F7] hover:bg-gray-200 active:scale-[0.98] rounded-xl border border-gray-200 transition-colors focus-visible:ring-2 focus-visible:ring-[#EF2B4D]"
               >
-                <span>Role Permissions Guide</span>
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                <span>Login</span>
               </a>
             </div>
 
@@ -210,7 +184,7 @@ export default function HeroSection({
                         LH-101 (Lecture Hall)
                       </h3>
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                        ● Available
+                        Available
                       </span>
                     </div>
                     <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
@@ -324,29 +298,6 @@ export default function HeroSection({
                   Strict 1-Hour Constraint
                 </span>
               </div>
-            </div>
-
-            {/* Floating floating mini-badge 1 */}
-            <div className="hidden sm:flex absolute -bottom-6 -left-6 bg-white p-3 rounded-2xl shadow-xl border border-gray-200 items-center gap-3 max-w-xs animate-bounce duration-1000">
-              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                <CheckCircle className="w-5 h-5" />
-              </div>
-              <div className="text-xs">
-                <div className="font-bold text-gray-900">
-                  Central Seminar Hall
-                </div>
-                <div className="text-gray-500 text-[11px]">
-                  Approved for Tech Symposium ⚡
-                </div>
-              </div>
-            </div>
-
-            {/* Floating floating mini-badge 2 */}
-            <div className="hidden sm:flex absolute -top-4 -right-4 bg-white p-2.5 rounded-xl shadow-lg border border-gray-200 items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#EF2B4D] animate-pulse"></span>
-              <span className="text-xs font-bold text-gray-800">
-                Live Slot Synchronization
-              </span>
             </div>
 
           </div>

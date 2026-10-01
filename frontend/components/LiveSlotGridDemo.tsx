@@ -14,11 +14,7 @@ import {
   Info,
 } from "lucide-react";
 
-interface SlotGridProps {
-  onOpenBookingModal?: (facilityName?: string, slotTime?: string) => void;
-}
-
-export default function LiveSlotGridDemo({ onOpenBookingModal }: SlotGridProps) {
+export default function LiveSlotGridDemo() {
   const [selectedFacility, setSelectedFacility] = useState("LHC-101 (Lecture Complex)");
   const [selectedDate, setSelectedDate] = useState("Today (Oct 1)");
   const [activeSlot, setActiveSlot] = useState<string | null>("10:00 - 11:00 AM");
@@ -49,10 +45,6 @@ export default function LiveSlotGridDemo({ onOpenBookingModal }: SlotGridProps) 
         
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDE8EB] text-xs font-bold text-[#EF2B4D] uppercase tracking-wider">
-            <Clock className="w-3.5 h-3.5" />
-            Live Slot Matrix Engine
-          </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1F1F1F] mt-3 tracking-tight">
             Real-Time Slot Synchronization
           </h2>
@@ -221,7 +213,7 @@ export default function LiveSlotGridDemo({ onOpenBookingModal }: SlotGridProps) 
               })}
             </div>
 
-            {/* Selected Slot Call to Action */}
+            {/* Selected Slot Status */}
             <div className="mt-8 p-5 bg-[#FDE8EB]/40 border border-[#EF2B4D]/30 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-[#EF2B4D] text-white flex items-center justify-center shrink-0 shadow-xs">
@@ -232,22 +224,10 @@ export default function LiveSlotGridDemo({ onOpenBookingModal }: SlotGridProps) 
                     Selected: {selectedFacility} · {activeSlot || "10:00 - 11:00 AM"}
                   </div>
                   <div className="text-xs text-gray-600">
-                    Ready to submit formal booking request for Admin sign-off.
+                    Live availability preview for {selectedDate}.
                   </div>
                 </div>
               </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (onOpenBookingModal) {
-                    onOpenBookingModal(selectedFacility, activeSlot || "10:00 - 11:00 AM");
-                  }
-                }}
-                className="w-full sm:w-auto px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#EF2B4D] hover:bg-[#D81E40] rounded-xl shadow-sm transition-all shrink-0"
-              >
-                Proceed with Booking Request
-              </button>
             </div>
 
           </div>

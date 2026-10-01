@@ -16,11 +16,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-interface NavbarProps {
-  onOpenBookingModal?: () => void;
-}
-
-export default function Navbar({ onOpenBookingModal }: NavbarProps) {
+export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -49,33 +45,6 @@ export default function Navbar({ onOpenBookingModal }: NavbarProps) {
           : "bg-white border-b border-gray-100/80"
       }`}
     >
-      {/* Top micro-announcement banner */}
-      <div className="bg-[#1F1F1F] text-white text-xs py-1.5 px-4">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#EF2B4D] text-white uppercase tracking-wider">
-              NITK Surathkal
-            </span>
-            <span className="text-gray-300 hidden sm:inline">
-              Campus Infrastructure Booking Module · Centralized & Real-Time
-            </span>
-            <span className="text-gray-300 sm:hidden">
-              SlotSync Infrastructure Portal
-            </span>
-          </div>
-          <div className="flex items-center gap-4 text-[11px] text-gray-300">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Booking Engine Live
-            </span>
-            <span className="text-gray-500 hidden md:inline">|</span>
-            <span className="text-gray-300 hidden md:inline">
-              Zero Overlap Guarantee
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
@@ -119,27 +88,24 @@ export default function Navbar({ onOpenBookingModal }: NavbarProps) {
               href="#roles"
               className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-black hover:bg-[#F4F5F7] rounded-lg transition-colors border border-gray-200 focus-visible:ring-2 focus-visible:ring-[#EF2B4D] focus-visible:outline-none"
             >
-              Role Guide
+              Login
             </a>
-            <button
-              type="button"
-              onClick={onOpenBookingModal}
+            <a
+              href=""
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#EF2B4D] hover:bg-[#D81E40] active:scale-[0.98] rounded-lg shadow-sm hover:shadow transition-all focus-visible:ring-2 focus-visible:ring-[#EF2B4D] focus-visible:ring-offset-2 focus-visible:outline-none"
             >
-              <span>Book a Slot</span>
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </button>
+              <span>Signup</span>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 md:hidden">
-            <button
-              type="button"
-              onClick={onOpenBookingModal}
+            <a
+              href="#facilities"
               className="px-3 py-1.5 text-xs font-semibold text-white bg-[#EF2B4D] rounded-md"
             >
               Book
-            </button>
+            </a>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -178,16 +144,15 @@ export default function Navbar({ onOpenBookingModal }: NavbarProps) {
           </div>
 
           <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
-            <button
-              type="button"
+            <a
+              href="#facilities"
               onClick={() => {
                 setMobileMenuOpen(false);
-                if (onOpenBookingModal) onOpenBookingModal();
               }}
               className="w-full py-2.5 px-4 text-center text-sm font-semibold text-white bg-[#EF2B4D] hover:bg-[#D81E40] rounded-lg shadow-sm"
             >
               Request 1-Hour Slot
-            </button>
+            </a>
             <a
               href="#roles"
               onClick={() => setMobileMenuOpen(false)}

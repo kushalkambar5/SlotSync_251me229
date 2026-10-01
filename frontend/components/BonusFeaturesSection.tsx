@@ -35,10 +35,6 @@ export default function BonusFeaturesSection() {
         
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#EF2B4D] text-xs font-bold text-white uppercase tracking-wider shadow-xs">
-            <Sparkles className="w-3.5 h-3.5" />
-            Bonus Intelligence & Advanced Modules
-          </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1F1F1F] mt-3 tracking-tight">
             Engineered for Campus-Scale Reliability
           </h2>

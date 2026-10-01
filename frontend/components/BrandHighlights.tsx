@@ -65,9 +65,6 @@ export default function BrandHighlights() {
         {/* Before vs After Problem Solution Card */}
         <div className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-200 shadow-sm">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="text-xs font-bold text-[#EF2B4D] uppercase tracking-wider bg-[#FDE8EB] px-3 py-1 rounded-full">
-              The Campus Infrastructure Transformation
-            </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1F1F1F] mt-3 tracking-tight">
               Why NITK is Moving Away from Paper Registers
             </h2>
