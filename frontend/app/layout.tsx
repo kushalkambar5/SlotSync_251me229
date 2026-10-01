@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { QueryProvider } from "@/providers/QueryProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -31,7 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased scroll-smooth`}>
       <body className="min-h-full flex flex-col font-sans bg-white text-[#1F1F1F] selection:bg-[#EF2B4D] selection:text-white">
-        {children}
+        <QueryProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

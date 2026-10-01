@@ -66,64 +66,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Architecture Col */}
-          <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-[#EF2B4D] mb-3">
-              Technical Stack
-            </div>
-            <ul className="space-y-2 text-xs text-gray-300">
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#EF2B4D]" />
-                <span>Next.js 16 & React 19</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#EF2B4D]" />
-                <span>Tailwind CSS v4</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#EF2B4D]" />
-                <span>Relational DB & MVC Pattern</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#EF2B4D]" />
-                <span>Zero-Overlap Concurrency Locking</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Mentors Col */}
-          <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-[#EF2B4D] mb-3">
-              Mentors & Guidance
-            </div>
-            <div className="space-y-2 text-xs text-gray-300">
-              <div>
-                <a
-                  href="https://github.com/aditip149209"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white flex items-center gap-1 text-[#EF2B4D]"
-                >
-                  <span>Aditi Pandey</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-                <span className="text-[11px] text-gray-400">Technical Mentor</span>
-              </div>
-              <div className="pt-1">
-                <a
-                  href="https://github.com/AbhimanyuKapoor"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white flex items-center gap-1 text-[#EF2B4D]"
-                >
-                  <span>Abhimanyu Kapoor</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-                <span className="text-[11px] text-gray-400">Technical Mentor</span>
-              </div>
-            </div>
-          </div>
-
         </div>
 
         {/* Bottom Bar */}

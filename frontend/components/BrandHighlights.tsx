@@ -15,53 +15,9 @@ import {
 } from "lucide-react";
 
 export default function BrandHighlights() {
-  const stats = [
-    {
-      value: "45+",
-      label: "Campus Venues",
-      desc: "LHC Classrooms, Seminar Halls & Specialized Labs",
-    },
-    {
-      value: "0",
-      label: "Double Bookings",
-      desc: "Microsecond concurrency lock prevents schedule collisions",
-    },
-    {
-      value: "< 2 min",
-      label: "Request to Log",
-      desc: "Instant submission replaces physical signatures",
-    },
-    {
-      value: "100%",
-      label: "RBAC Compliance",
-      desc: "Strict backend validation on Faculty, Admin & Student routes",
-    },
-  ];
-
   return (
     <section className="py-16 bg-[#F4F5F7]/70 border-y border-gray-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Top Stats Strip */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-          {stats.map((stat, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl p-6 border border-gray-200 shadow-xs text-center hover:border-[#EF2B4D]/40 transition-colors"
-            >
-              <div className="text-3xl sm:text-4xl font-extrabold text-[#EF2B4D] tracking-tight">
-                {stat.value}
-              </div>
-              <div className="text-sm font-bold text-[#1F1F1F] mt-1">
-                {stat.label}
-              </div>
-              <div className="text-xs text-gray-500 mt-1 leading-normal">
-                {stat.desc}
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Before vs After Problem Solution Card */}
         <div className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-200 shadow-sm">
           <div className="text-center max-w-3xl mx-auto mb-10">

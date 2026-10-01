@@ -84,18 +84,18 @@ export default function Navbar() {
 
           {/* Right Action CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <a
-              href="#roles"
+            <Link
+              href="/login"
               className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-black hover:bg-[#F4F5F7] rounded-lg transition-colors border border-gray-200 focus-visible:ring-2 focus-visible:ring-[#EF2B4D] focus-visible:outline-none"
             >
               Login
-            </a>
-            <a
-              href=""
+            </Link>
+            <Link
+              href="/register"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-[#EF2B4D] hover:bg-[#D81E40] active:scale-[0.98] rounded-lg shadow-sm hover:shadow transition-all focus-visible:ring-2 focus-visible:ring-[#EF2B4D] focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               <span>Signup</span>
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}

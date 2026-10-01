@@ -66,14 +66,14 @@ export default function HeroSection() {
             {/* Action Buttons */}
             <div className="mt-8 flex flex-wrap items-center gap-4 w-full sm:w-auto">
               <a
-                href=""
+                href="/register"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 text-base font-bold text-white bg-[#EF2B4D] hover:bg-[#D81E40] active:scale-[0.98] rounded-xl shadow-md hover:shadow-lg hover:shadow-[#EF2B4D]/20 transition-all focus-visible:ring-2 focus-visible:ring-[#EF2B4D] focus-visible:ring-offset-2"
               >
                 <span>Signup</span>
               </a>
 
               <a
-                href=""
+                href="/login"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold text-[#1F1F1F] bg-[#F4F5F7] hover:bg-gray-200 active:scale-[0.98] rounded-xl border border-gray-200 transition-colors focus-visible:ring-2 focus-visible:ring-[#EF2B4D]"
               >
                 <span>Login</span>
@@ -286,17 +286,6 @@ export default function HeroSection() {
                   )}
                 </div>
 
-              </div>
-
-              {/* Bottom Feature highlights strip */}
-              <div className="bg-[#1F1F1F] p-3 text-white text-xs flex items-center justify-between px-6">
-                <span className="flex items-center gap-1.5 text-gray-300">
-                  <ShieldCheck className="w-4 h-4 text-[#EF2B4D]" />
-                  Atomic Overlap Prevention
-                </span>
-                <span className="text-[11px] text-rose-300 font-medium">
-                  Strict 1-Hour Constraint
-                </span>
               </div>
             </div>
 
