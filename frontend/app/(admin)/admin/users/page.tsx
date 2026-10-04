@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RequirePermission } from "@/components/auth/ProtectedRoute";
 import { PageHeader } from "@/components/layout/AppHeader";
 import { LoadingState, ErrorState, EmptyState } from "@/components/feedback/States";
@@ -25,17 +25,26 @@ function AdminUsersInner() {
   const [roleId, setRoleId] = useState("");
   const [active, setActive] = useState("");
   const [page, setPage] = useState(1);
-  const list = useUsers({ search: search || undefined, roleId: roleId || undefined, isActive: active || undefined, page, limit: 15 });
+  // Debounce the search input so fast typing doesn't fire out-of-order
+  // requests that can briefly show a stale list (e.g. a just-promoted
+  // faculty appearing to be "missing").
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search.trim()), 350);
+    return () => clearTimeout(t);
+  }, [search]);
+  const list = useUsers({ search: debouncedSearch || undefined, roleId: roleId || undefined, isActive: active || undefined, page, limit: 15 });
   const { data: roles } = useRoles();
+  const activeRoles = (roles ?? []).filter((r) => r.isActive);
 
   return (
     <div>
-      <PageHeader title="User management" description="Search by email, filter by role or status, manage accounts." />
+      <PageHeader title="User management" description="Search by name or email, filter by role or status, manage accounts." />
       <div className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-gray-200/80 bg-white p-4 sm:grid-cols-3">
-        <div><Label htmlFor="u-search">Search (email)</Label><Input id="u-search" placeholder="name@nitk.edu.in" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} /></div>
+        <div><Label htmlFor="u-search">Search (name or email)</Label><Input id="u-search" placeholder="name or name@nitk.edu.in" value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} /></div>
         <div><Label htmlFor="u-role">Role</Label>
           <Select id="u-role" value={roleId} onChange={(e) => { setRoleId(e.target.value); setPage(1); }}>
-            <option value="">All roles</option>{(roles ?? []).map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+            <option value="">All roles</option>{activeRoles.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
           </Select></div>
         <div><Label htmlFor="u-active">Status</Label>
           <Select id="u-active" value={active} onChange={(e) => { setActive(e.target.value); setPage(1); }}>

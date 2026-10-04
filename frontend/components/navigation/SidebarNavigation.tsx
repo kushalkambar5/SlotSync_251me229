@@ -55,7 +55,11 @@ export function useVisibleNav() {
 
 function NavLink({ href, label, icon: Icon }: NavItem) {
   const pathname = usePathname();
-  const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
+  // Exact match, or a true child route (href + "/..."). "/dashboard" and
+  // "/admin" are index pages, so they only highlight on exact match —
+  // otherwise Admin Overview would stay lit on every /admin/* page.
+  const isIndex = href === "/dashboard" || href === "/admin";
+  const active = pathname === href || (!isIndex && pathname.startsWith(`${href}/`));
   return (
     <Link
       href={href}

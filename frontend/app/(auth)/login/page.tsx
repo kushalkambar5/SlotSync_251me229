@@ -15,8 +15,16 @@ import { Input, Label, FieldError } from "@/components/ui/Input";
 import { Card, CardBody } from "@/components/ui/Card";
 import { Spinner } from "@/components/ui/Card";
 
+const NITK_EMAIL_DOMAIN = "@nitk.edu.in";
+
 const schema = z.object({
-  email: z.string().email("Enter a valid email."),
+  email: z
+    .string()
+    .trim()
+    .email("Enter a valid email.")
+    .refine((v) => v.toLowerCase().endsWith(NITK_EMAIL_DOMAIN), {
+      message: `Only ${NITK_EMAIL_DOMAIN} email addresses are allowed.`,
+    }),
   password: z.string().min(1, "Password is required."),
 });
 

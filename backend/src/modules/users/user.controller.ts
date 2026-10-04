@@ -3,7 +3,6 @@ import { UserService } from "./user.service.js";
 import { RbacService } from "../rbac/rbac.service.js";
 import { Errors } from "../../utils/errors.js";
 import { ok, paginated } from "../../utils/response.js";
-import { assignRoleSchema } from "../rbac/rbac.validation.js";
 
 export const UserController = {
   async getMe(req: Request, res: Response): Promise<void> {
@@ -46,8 +45,10 @@ export const UserController = {
 
   async setRole(req: Request, res: Response): Promise<void> {
     if (!req.user) throw Errors.unauthenticated();
-    const parsed = assignRoleSchema.parse(req.body);
-    await RbacService.assignRoleToUser(req.user.id, req.params.id as string, parsed.roleId);
-    ok(res, await UserService.getOrThrow(req.params.id as string));
+    // Body already validated by validate(assignRoleSchema) in user.routes.ts —
+    // do not re-parse here (single source of truth for validation).
+    const { roleId } = req.body as { roleId: string };
+    const fresh = await RbacService.assignRoleToUser(req.user.id, req.params.id as string, roleId);
+    ok(res, fresh);
   },
 };

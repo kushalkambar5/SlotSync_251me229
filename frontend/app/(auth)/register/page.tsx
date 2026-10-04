@@ -15,10 +15,18 @@ import { Button } from "@/components/ui/Button";
 import { Input, Select, Label, FieldError } from "@/components/ui/Input";
 import { Card, CardBody } from "@/components/ui/Card";
 
+const NITK_EMAIL_DOMAIN = "@nitk.edu.in";
+
 const schema = z
   .object({
     name: z.string().min(2, "Name must be at least 2 characters."),
-    email: z.string().email("Enter a valid email."),
+    email: z
+      .string()
+      .trim()
+      .email("Enter a valid email.")
+      .refine((v) => v.toLowerCase().endsWith(NITK_EMAIL_DOMAIN), {
+        message: `Only ${NITK_EMAIL_DOMAIN} email addresses are allowed.`,
+      }),
     password: z.string().min(6, "Password must be at least 6 characters."),
     confirmPassword: z.string(),
     departmentId: z.string().optional(),

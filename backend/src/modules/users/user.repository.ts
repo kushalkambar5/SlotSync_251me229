@@ -1,4 +1,4 @@
-import { and, desc, eq, ilike, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { db } from "../../db/client.js";
 import { roles, users } from "../../db/schema/index.js";
 
@@ -15,7 +15,9 @@ export async function findUsers(filters: UserFilters) {
   if (filters.roleId) conds.push(eq(users.roleId, filters.roleId));
   if (filters.isActive !== undefined) conds.push(eq(users.isActive, filters.isActive));
   if (filters.search)
-    conds.push(ilike(users.email, `%${filters.search}%`));
+    conds.push(
+      or(ilike(users.email, `%${filters.search}%`), ilike(users.name, `%${filters.search}%`)),
+    );
   const where = conds.length > 0 ? and(...conds) : undefined;
   const rows = await db
     .select({

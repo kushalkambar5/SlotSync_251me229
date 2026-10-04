@@ -21,7 +21,7 @@ export const RbacService = {
   },
 
   listRoles() {
-    return db.select().from(roles);
+    return db.select().from(roles).orderBy(roles.name);
   },
 
   async getRoleOrThrow(id: string) {
@@ -91,7 +91,7 @@ export const RbacService = {
   },
 
   listPermissions() {
-    return db.select().from(permissions);
+    return db.select().from(permissions).orderBy(permissions.name);
   },
 
   async assignRoleToUser(adminId: string, userId: string, roleId: string) {
@@ -102,15 +102,23 @@ export const RbacService = {
     const target = userRows[0];
     if (!target) throw Errors.notFound("User");
     const oldRoleId = target.roleId;
-    await db.update(users).set({ roleId, updatedAt: new Date() }).where(eq(users.id, userId));
-    const { createAudit } = await import("../audit/audit.repository.js");
-    await createAudit({
-      actorUserId: adminId,
-      action: "USER_ROLE_CHANGED",
-      entityType: "user",
-      entityId: userId,
-      oldValues: { roleId: oldRoleId },
-      newValues: { roleId },
-    });
+    // No-op when the role is unchanged — avoids noisy audit rows and a
+    // needless updatedAt bump while still returning the fresh user below.
+    if (oldRoleId !== roleId) {
+      await db.update(users).set({ roleId, updatedAt: new Date() }).where(eq(users.id, userId));
+      const { createAudit } = await import("../audit/audit.repository.js");
+      await createAudit({
+        actorUserId: adminId,
+        action: "USER_ROLE_CHANGED",
+        entityType: "user",
+        entityId: userId,
+        oldValues: { roleId: oldRoleId },
+        newValues: { roleId },
+      });
+    }
+    const { findUserById } = await import("../users/user.repository.js");
+    const fresh = await findUserById(userId);
+    if (!fresh) throw Errors.notFound("User");
+    return fresh;
   },
 };

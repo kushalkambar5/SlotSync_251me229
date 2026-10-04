@@ -21,7 +21,10 @@ export function useUpdateUserStatus() {
   return useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
       usersApi.setStatus(id, isActive),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["users"] }),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: ["users"] });
+      qc.invalidateQueries({ queryKey: ["user", vars.id] });
+    },
   });
 }
 
@@ -30,7 +33,12 @@ export function useAssignRole() {
   return useMutation({
     mutationFn: ({ id, roleId }: { id: string; roleId: string }) =>
       usersApi.setRole(id, roleId),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["users"] }),
+    onSuccess: (_data, vars) => {
+      // Invalidate the list (so the user shows up under the new role filter)
+      // AND the detail query (so the detail page shows the fresh roleName).
+      qc.invalidateQueries({ queryKey: ["users"] });
+      qc.invalidateQueries({ queryKey: ["user", vars.id] });
+    },
   });
 }
 

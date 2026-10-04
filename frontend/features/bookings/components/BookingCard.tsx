@@ -57,6 +57,15 @@ export function BookingTimeline({ status }: { status: Booking["status"] }) {
             ? ["PENDING", "APPROVED"]
             : ["PENDING"];
   void STEPS;
+  // Final-step color follows the same semantics as BookingStatusBadge:
+  // approved/cancelled = green, rejected = red, in-between = amber/orange.
+  const finalStyles: Record<string, string> = {
+    PENDING: "bg-amber-500 text-white",
+    APPROVED: "bg-emerald-500 text-white",
+    REJECTED: "bg-red-500 text-white",
+    CANCELLATION_REQUESTED: "bg-orange-500 text-white",
+    CANCELLED: "bg-emerald-500 text-white",
+  };
   return (
     <ol className="flex flex-col gap-0" aria-label="Booking timeline">
       {flow.map((s, i) => (
@@ -65,7 +74,7 @@ export function BookingTimeline({ status }: { status: Booking["status"] }) {
             <span
               className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold ${
                 i === flow.length - 1
-                  ? "bg-[#EF2B4D] text-white"
+                  ? (finalStyles[s] ?? "bg-[#EF2B4D] text-white")
                   : "bg-emerald-100 text-emerald-700"
               }`}
             >

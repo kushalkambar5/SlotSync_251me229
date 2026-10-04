@@ -1,6 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import BrandHighlights from "@/components/BrandHighlights";
@@ -12,6 +14,22 @@ import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
 
 export default function Home() {
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.replace("/dashboard");
+    }
+  }, [isLoading, isAuthenticated, router]);
+
+  // Avoid flashing the landing page for logged-in users while redirecting.
+  // While the session is being checked, don't render the marketing content yet
+  // if we already know the user is authenticated.
+  if (!isLoading && isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#1F1F1F]">
       {/* Navigation Bar */}

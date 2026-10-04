@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { RequirePermission } from "@/components/auth/ProtectedRoute";
 import { PageHeader } from "@/components/layout/AppHeader";
@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/Button";
 import { Select, Label } from "@/components/ui/Input";
 import { PERMISSIONS } from "@/lib/auth/permissions";
 import { getErrorMessage } from "@/lib/api/errors";
-import { usersApi } from "@/features/users/api";
 import { useManagedUser, useRoles, useUpdateUserStatus, useAssignRole } from "@/features/users/hooks";
 
 export default function AdminUserDetailPage() {
@@ -33,10 +32,30 @@ function AdminUserInner() {
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
-  const act = async (fn: () => Promise<unknown>, ok: string) => {
+  const currentRoleId = user.data?.roleId ?? "";
+  // Auto-select the user's present role once it loads (and when switching
+  // between users). This keeps manual selection intact otherwise.
+  useEffect(() => {
+    if (user.data?.roleId) setRoleId(user.data.roleId);
+  }, [id, user.data?.roleId]);
+
+  const act = async (fn: () => Promise<unknown>, ok: string, after?: () => Promise<unknown>) => {
     setMsg(null); setErr(null);
-    try { await fn(); setMsg(ok); } catch (e) { setErr(getErrorMessage(e)); }
+    try {
+      await fn();
+      if (after) await after();
+      else await user.refetch();
+      setMsg(ok);
+    } catch (e) { setErr(getErrorMessage(e)); }
   };
+
+  const activeRoles = (roles ?? []).filter((r) => r.isActive);
+  // Keep the present role selectable even if it was deactivated after
+  // assignment, so the dropdown never renders blank for the current value.
+  const currentRole = (roles ?? []).find((r) => r.id === currentRoleId);
+  const roleOptions =
+    currentRole && !currentRole.isActive ? [...activeRoles, currentRole] : activeRoles;
+  const isRoleUnchanged = !roleId || roleId === currentRoleId;
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -58,7 +77,7 @@ function AdminUserInner() {
           <Card className="mt-4"><CardBody>
             <h2 className="text-sm font-bold">Account status</h2>
             <div className="mt-2 flex gap-2">
-              <Button size="sm" variant="secondary" loading={setStatus.isPending} onClick={() => void act(() => usersApi.setStatus(id, !user.data!.isActive).then(() => undefined), `User ${user.data!.isActive ? "deactivated" : "activated"}.`)}>
+              <Button size="sm" variant="secondary" loading={setStatus.isPending} onClick={() => void act(() => setStatus.mutateAsync({ id, isActive: !user.data!.isActive }), `User ${user.data!.isActive ? "deactivated" : "activated"}.`)}>
                 {user.data.isActive ? "Deactivate" : "Activate"}
               </Button>
             </div>
@@ -71,10 +90,10 @@ function AdminUserInner() {
                 <Label htmlFor="ur-role">Role</Label>
                 <Select id="ur-role" value={roleId} onChange={(e) => setRoleId(e.target.value)}>
                   <option value="">Select role…</option>
-                  {(roles ?? []).map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+                  {roleOptions.map((r) => <option key={r.id} value={r.id}>{r.name}{r.isActive ? "" : " (inactive)"}</option>)}
                 </Select>
               </div>
-              <Button disabled={!roleId} loading={assignRole.isPending} onClick={() => void act(() => assignRole.mutateAsync({ id, roleId }), "Role updated.")}>Assign</Button>
+              <Button disabled={isRoleUnchanged} loading={assignRole.isPending} onClick={() => void act(() => assignRole.mutateAsync({ id, roleId }), "Role updated. The user will now appear under the new role filter.", async () => { await user.refetch(); })}>Assign</Button>
             </div>
           </CardBody></Card>
         </>

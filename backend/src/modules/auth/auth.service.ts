@@ -7,6 +7,15 @@ import { signToken } from "../../middleware/auth.middleware.js";
 
 const SALT_ROUNDS = 10;
 
+const NITK_EMAIL_DOMAIN = "@nitk.edu.in";
+
+/** Defense-in-depth: zod schemas reject non-NITK emails first, service re-checks. */
+function assertNitkEmail(normalizedEmail: string): void {
+  if (!normalizedEmail.endsWith(NITK_EMAIL_DOMAIN)) {
+    throw Errors.validation(`email: Only ${NITK_EMAIL_DOMAIN} email addresses are allowed.`);
+  }
+}
+
 function sanitizeUser(row: typeof users.$inferSelect) {
   const { passwordHash: _omit, ...rest } = row;
   return rest;
@@ -30,6 +39,7 @@ export const AuthService = {
   /** backend_plan.md §10 — client must NOT choose roleId; backend assigns default STUDENT. */
   async register(input: { name: string; email: string; password: string; departmentId?: string }) {
     const email = input.email.trim().toLowerCase();
+    assertNitkEmail(email);
     const existing = await db
       .select({ id: users.id })
       .from(users)
@@ -78,6 +88,7 @@ export const AuthService = {
 
   async login(input: { email: string; password: string }) {
     const email = input.email.trim().toLowerCase();
+    assertNitkEmail(email);
     const rows = await db
       .select()
       .from(users)
