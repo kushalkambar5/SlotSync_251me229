@@ -1,4 +1,22 @@
-# SlotSync — Campus Infrastructure Booking Module
+<p align="center">
+  <img src="./frontend/public/navbar_logo.png" alt="SlotSync Logo" width="300" />
+</p>
+
+<h1 align="center">SlotSync — Campus Infrastructure Booking Module</h1>
+
+## 🎬 Project Demo Video
+
+<p align="center">
+  <a href="https://youtu.be/CrvRBlobgR4" target="_blank">
+    <img src="https://img.youtube.com/vi/CrvRBlobgR4/0.jpg" alt="SlotSync Project Demo Video" width="560" />
+  </a>
+</p>
+
+<p align="center">
+  ▶️ <a href="https://youtu.be/CrvRBlobgR4" target="_blank"><strong>Watch the Project Demo on YouTube</strong></a>
+</p>
+
+---
 
 Booking a classroom, seminar hall, or lab at NITK still means paper registers, running around for signatures, and double-bookings nobody notices until the day. **SlotSync** replaces that with live availability, 1-click 1-hour slot requests, role-based approvals, waitlists, penalties, analytics, and instant in-app notifications — all in one place.
 
