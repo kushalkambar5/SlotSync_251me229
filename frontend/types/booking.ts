@@ -3,9 +3,17 @@ import type { BookingStatus, CancellationStatus } from "./api";
 export interface Booking {
   id: string;
   userId: string;
-  userName?: string;
+  userName?: string | null;
+  userEmail?: string | null;
   facilityId: string;
-  facilityName?: string;
+  facilityName?: string | null;
+  facilityCode?: string | null;
+  facilityLocation?: string | null;
+  facilityBuilding?: string | null;
+  facilityFloor?: string | null;
+  facilityCapacity?: number | null;
+  facilityStatus?: string | null;
+  facilityTypeName?: string | null;
   bookingDate: string; // YYYY-MM-DD
   startTime: string; // HH:MM:SS
   endTime: string;
@@ -16,6 +24,7 @@ export interface Booking {
   rejectedAt?: string | null;
   cancelledAt?: string | null;
   createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CancellationRequest {

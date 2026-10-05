@@ -1,13 +1,81 @@
 import { and, desc, eq, sql } from "drizzle-orm";
 import type { Database } from "../../db/client.js";
 import { db } from "../../db/client.js";
-import { bookings, facilities, users } from "../../db/schema/index.js";
+import { bookings, facilities, facilityTypes, users } from "../../db/schema/index.js";
 
 export type BookingRow = typeof bookings.$inferSelect;
 
 export async function findBookingById(id: string, tx?: Database): Promise<BookingRow | null> {
   const runner = tx ?? db;
   const rows = await runner.select().from(bookings).where(eq(bookings.id, id)).limit(1);
+  return rows[0] ?? null;
+}
+
+export interface BookingDetail {
+  id: string;
+  userId: string;
+  userName: string | null;
+  userEmail: string | null;
+  facilityId: string;
+  facilityName: string | null;
+  facilityCode: string | null;
+  facilityLocation: string | null;
+  facilityBuilding: string | null;
+  facilityFloor: string | null;
+  facilityCapacity: number | null;
+  facilityStatus: string | null;
+  facilityTypeName: string | null;
+  bookingDate: string;
+  startTime: string;
+  endTime: string;
+  status: BookingRow["status"];
+  purpose: string | null;
+  rejectionReason: string | null;
+  approvedAt: Date | null;
+  rejectedAt: Date | null;
+  cancelledAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export async function findBookingDetailById(
+  id: string,
+  tx?: Database,
+): Promise<BookingDetail | null> {
+  const runner = tx ?? db;
+  const rows = await runner
+    .select({
+      id: bookings.id,
+      userId: bookings.userId,
+      userName: users.name,
+      userEmail: users.email,
+      facilityId: bookings.facilityId,
+      facilityName: facilities.name,
+      facilityCode: facilities.code,
+      facilityLocation: facilities.location,
+      facilityBuilding: facilities.building,
+      facilityFloor: facilities.floor,
+      facilityCapacity: facilities.capacity,
+      facilityStatus: facilities.status,
+      facilityTypeName: facilityTypes.name,
+      bookingDate: bookings.bookingDate,
+      startTime: bookings.startTime,
+      endTime: bookings.endTime,
+      status: bookings.status,
+      purpose: bookings.purpose,
+      rejectionReason: bookings.rejectionReason,
+      approvedAt: bookings.approvedAt,
+      rejectedAt: bookings.rejectedAt,
+      cancelledAt: bookings.cancelledAt,
+      createdAt: bookings.createdAt,
+      updatedAt: bookings.updatedAt,
+    })
+    .from(bookings)
+    .leftJoin(users, eq(bookings.userId, users.id))
+    .leftJoin(facilities, eq(bookings.facilityId, facilities.id))
+    .leftJoin(facilityTypes, eq(facilities.typeId, facilityTypes.id))
+    .where(eq(bookings.id, id))
+    .limit(1);
   return rows[0] ?? null;
 }
 
@@ -38,8 +106,15 @@ export async function findBookings(filters: BookingListFilters) {
       id: bookings.id,
       userId: bookings.userId,
       userName: users.name,
+      userEmail: users.email,
       facilityId: bookings.facilityId,
       facilityName: facilities.name,
+      facilityCode: facilities.code,
+      facilityLocation: facilities.location,
+      facilityBuilding: facilities.building,
+      facilityFloor: facilities.floor,
+      facilityCapacity: facilities.capacity,
+      facilityTypeName: facilityTypes.name,
       bookingDate: bookings.bookingDate,
       startTime: bookings.startTime,
       endTime: bookings.endTime,
@@ -51,6 +126,7 @@ export async function findBookings(filters: BookingListFilters) {
     .from(bookings)
     .leftJoin(users, eq(bookings.userId, users.id))
     .leftJoin(facilities, eq(bookings.facilityId, facilities.id))
+    .leftJoin(facilityTypes, eq(facilities.typeId, facilityTypes.id))
     .where(where)
     .orderBy(desc(bookings.createdAt))
     .limit(filters.limit)

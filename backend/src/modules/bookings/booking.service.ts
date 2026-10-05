@@ -20,6 +20,7 @@ import { NotificationService } from "../notifications/notification.service.js";
 import {
   findActiveBookingForUserOnDate,
   findBookingById,
+  findBookingDetailById,
   findBookings,
   findOverlappingApproved,
 } from "./booking.repository.js";
@@ -150,6 +151,23 @@ export const BookingService = {
           "You already have an active booking for this day (max one per day).",
         );
 
+      // Fail fast when the slot already has an APPROVED booking. This keeps
+      // creation consistent with getAvailability (which marks APPROVED as
+      // BOOKED) instead of letting users create PENDING requests that can
+      // never be approved. The exclusion constraint remains the final arbiter.
+      const overlapping = await findOverlappingApproved(
+        input.facilityId,
+        input.bookingDate,
+        startTime,
+        endTime,
+        tx,
+      );
+      if (overlapping.length > 0)
+        throw Errors.conflict(
+          "BOOKING_OVERLAP",
+          "This slot overlaps an approved booking and is no longer available.",
+        );
+
       const inserted = await tx
         .insert(bookings)
         .values({
@@ -180,16 +198,19 @@ export const BookingService = {
         },
         tx,
       );
+      const detail = await findBookingDetailById(booking.id, tx);
       void facility;
-      return booking;
+      return detail ?? booking;
     });
   },
 
   async getBooking(requesterId: string, isAdmin: boolean, bookingId: string) {
-    const booking = await findBookingById(bookingId);
-    if (!booking) throw Errors.notFound("Booking");
-    if (!isAdmin && booking.userId !== requesterId)
+    const raw = await findBookingById(bookingId);
+    if (!raw) throw Errors.notFound("Booking");
+    if (!isAdmin && raw.userId !== requesterId)
       throw Errors.forbidden("You cannot view another user's booking.");
+    const booking = await findBookingDetailById(bookingId);
+    if (!booking) throw Errors.notFound("Booking");
     return booking;
   },
 
@@ -266,7 +287,8 @@ export const BookingService = {
         },
         tx,
       );
-      return next;
+      const detail = await findBookingDetailById(booking.id, tx);
+      return detail ?? next;
     });
   },
 
@@ -306,7 +328,8 @@ export const BookingService = {
         },
         tx,
       );
-      return next;
+      const detail = await findBookingDetailById(booking.id, tx);
+      return detail ?? next;
     });
   },
 };

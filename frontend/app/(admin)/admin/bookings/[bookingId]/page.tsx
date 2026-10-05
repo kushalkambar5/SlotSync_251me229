@@ -50,6 +50,12 @@ function AdminBookingInner() {
     }
   };
 
+  const venueLine = b
+    ? [b.facilityBuilding, b.facilityFloor ? `Floor ${b.facilityFloor}` : null, b.facilityLocation]
+        .filter(Boolean)
+        .join(" · ")
+    : "";
+
   return (
     <div className="mx-auto max-w-3xl">
       <PageHeader title="Review booking" action={<Link href="/admin/bookings" className="text-xs font-bold text-[#EF2B4D] hover:underline">← Queue</Link>} />
@@ -62,14 +68,44 @@ function AdminBookingInner() {
           <Card><CardBody>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="text-xl font-extrabold">{b.facilityName}</h2>
-                <p className="text-sm text-gray-600">{formatDate(b.bookingDate)} · {slotLabel(b.startTime, b.endTime)}</p>
-                <p className="mt-1 text-sm text-gray-600">Requester: <strong>{b.userName}</strong></p>
-                {b.purpose && <p className="mt-2 text-sm text-gray-600">Purpose: {b.purpose}</p>}
-                {b.rejectionReason && <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">Reason: {b.rejectionReason}</p>}
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                  {b.facilityTypeName ?? "Facility"}{b.facilityCode ? ` · ${b.facilityCode}` : ""}
+                </p>
+                <h2 className="mt-1 text-xl font-extrabold">{b.facilityName ?? "Facility"}</h2>
+                <p className="mt-1 text-sm text-gray-600">{formatDate(b.bookingDate)} · {slotLabel(b.startTime, b.endTime)}</p>
+                {venueLine ? <p className="mt-1 text-sm text-gray-600">📍 {venueLine}</p> : null}
+                {b.facilityCapacity != null ? (
+                  <p className="mt-1 text-xs text-gray-500">Capacity: {b.facilityCapacity}</p>
+                ) : null}
               </div>
               <BookingStatusBadge status={b.status} />
             </div>
+
+            <dl className="mt-5 grid grid-cols-1 gap-4 border-t border-gray-100 pt-4 text-sm sm:grid-cols-2">
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Date</dt><dd className="font-semibold">{formatDate(b.bookingDate)}</dd></div>
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Time slot</dt><dd className="font-semibold">{slotLabel(b.startTime, b.endTime)}</dd></div>
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Room / Facility</dt><dd>{b.facilityName ?? "—"}</dd></div>
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Facility code</dt><dd>{b.facilityCode ?? "—"}</dd></div>
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Building</dt><dd>{b.facilityBuilding ?? "—"}</dd></div>
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Floor / Room no.</dt><dd>{b.facilityFloor ?? "—"}</dd></div>
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Location</dt><dd>{b.facilityLocation ?? "—"}</dd></div>
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Type</dt><dd>{b.facilityTypeName ?? "—"}</dd></div>
+              <div>
+                <dt className="text-xs font-bold text-gray-400 uppercase">Requester</dt>
+                <dd className="font-semibold">{b.userName ?? b.userId}</dd>
+                {b.userEmail && <dd className="text-xs text-gray-500">{b.userEmail}</dd>}
+              </div>
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Purpose</dt><dd>{b.purpose || "—"}</dd></div>
+              {b.createdAt && <div><dt className="text-xs font-bold text-gray-400 uppercase">Requested at</dt><dd>{new Date(b.createdAt).toLocaleString()}</dd></div>}
+              <div><dt className="text-xs font-bold text-gray-400 uppercase">Booking ID</dt><dd className="break-all font-mono text-xs">{b.id}</dd></div>
+              {b.rejectionReason && (
+                <div className="sm:col-span-2">
+                  <dt className="text-xs font-bold text-gray-400 uppercase">Rejection / review reason</dt>
+                  <dd className="mt-1 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800">{b.rejectionReason}</dd>
+                </div>
+              )}
+            </dl>
+
             {pending && (
               <div className="mt-5 flex flex-wrap gap-2 border-t border-gray-100 pt-4">
                 <Button onClick={() => setApproveOpen(true)} loading={approve.isPending}>Approve booking</Button>

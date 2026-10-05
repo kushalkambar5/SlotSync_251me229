@@ -16,6 +16,15 @@ import { useBooking, useRequestCancellation } from "@/features/bookings/hooks";
 import { BookingTimeline } from "@/features/bookings/components/BookingCard";
 import { CancellationDialog } from "@/features/bookings/components/BookingDialogs";
 
+function Field({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div>
+      <dt className="text-xs font-bold text-gray-400 uppercase">{label}</dt>
+      <dd className="mt-0.5 font-semibold text-[#1F1F1F]">{value}</dd>
+    </div>
+  );
+}
+
 export default function BookingDetailPage() {
   const params = useParams<{ bookingId: string }>();
   const id = params.bookingId;
@@ -30,6 +39,12 @@ export default function BookingDetailPage() {
   const canRequestCancel =
     !!b && !!isOwner && b.status === "APPROVED" && can(PERMISSIONS.CANCEL_BOOKING);
 
+  const venueLine = b
+    ? [b.facilityBuilding, b.facilityFloor ? `Floor ${b.facilityFloor}` : null, b.facilityLocation]
+        .filter(Boolean)
+        .join(" · ")
+    : "";
+
   return (
     <div className="mx-auto max-w-3xl">
       <PageHeader
@@ -41,26 +56,57 @@ export default function BookingDetailPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {ok && <SuccessMessage message={ok} />}
+
+          {/* Facility + time hero */}
           <Card><CardBody>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="text-xl font-extrabold">{b.facilityName ?? "Facility"}</h2>
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                  {b.facilityTypeName ?? "Facility"}{b.facilityCode ? ` · ${b.facilityCode}` : ""}
+                </p>
+                <h2 className="mt-1 text-xl font-extrabold">{b.facilityName ?? "Facility"}</h2>
                 <p className="mt-1 text-sm text-gray-600">{formatDate(b.bookingDate)} · {slotLabel(b.startTime, b.endTime)}</p>
+                {venueLine ? (
+                  <p className="mt-1 text-sm text-gray-600">📍 {venueLine}</p>
+                ) : null}
+                {b.facilityCapacity != null ? (
+                  <p className="mt-1 text-xs text-gray-500">Capacity: {b.facilityCapacity}</p>
+                ) : null}
               </div>
               <BookingStatusBadge status={b.status} />
             </div>
-            <dl className="mt-5 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
-              <div><dt className="text-xs font-bold text-gray-400 uppercase">Requester</dt><dd className="font-semibold">{b.userName ?? b.userId}</dd></div>
-              <div><dt className="text-xs font-bold text-gray-400 uppercase">Purpose</dt><dd>{b.purpose || "—"}</dd></div>
-              {b.rejectionReason && <div className="sm:col-span-2"><dt className="text-xs font-bold text-gray-400 uppercase">Rejection / review reason</dt><dd className="rounded-lg bg-red-50 px-3 py-2 text-red-800">{b.rejectionReason}</dd></div>}
-              {b.createdAt && <div><dt className="text-xs font-bold text-gray-400 uppercase">Requested at</dt><dd>{new Date(b.createdAt).toLocaleString()}</dd></div>}
+
+            <dl className="mt-5 grid grid-cols-1 gap-4 border-t border-gray-100 pt-4 text-sm sm:grid-cols-2">
+              <Field label="Date" value={formatDate(b.bookingDate)} />
+              <Field label="Time slot" value={slotLabel(b.startTime, b.endTime)} />
+              <Field label="Room / Facility" value={b.facilityName ?? "—"} />
+              <Field label="Facility code" value={b.facilityCode ?? "—"} />
+              <Field label="Building" value={b.facilityBuilding ?? "—"} />
+              <Field label="Floor / Room no." value={b.facilityFloor ?? "—"} />
+              <Field label="Location" value={b.facilityLocation ?? "—"} />
+              <Field label="Type" value={b.facilityTypeName ?? "—"} />
+              <Field label="Requester" value={b.userName ?? b.userId} />
+              <Field label="Purpose" value={b.purpose || "—"} />
+              {b.createdAt && <Field label="Requested at" value={new Date(b.createdAt).toLocaleString()} />}
+              {b.approvedAt && <Field label="Approved at" value={new Date(b.approvedAt).toLocaleString()} />}
+              {b.rejectedAt && <Field label="Rejected at" value={new Date(b.rejectedAt).toLocaleString()} />}
+              {b.cancelledAt && <Field label="Cancelled at" value={new Date(b.cancelledAt).toLocaleString()} />}
+              <Field label="Booking ID" value={<span className="break-all font-mono text-xs">{b.id}</span>} />
+              {b.rejectionReason && (
+                <div className="sm:col-span-2">
+                  <dt className="text-xs font-bold text-gray-400 uppercase">Rejection / review reason</dt>
+                  <dd className="mt-1 rounded-lg bg-red-50 px-3 py-2 text-red-800">{b.rejectionReason}</dd>
+                </div>
+              )}
             </dl>
+
             {canRequestCancel && (
               <div className="mt-5 border-t border-gray-100 pt-4">
                 <Button variant="outline" onClick={() => setDialog(true)}>Request cancellation</Button>
               </div>
             )}
           </CardBody></Card>
+
           <Card><CardBody>
             <h3 className="mb-3 text-sm font-bold">Lifecycle</h3>
             <BookingTimeline status={b.status} />
